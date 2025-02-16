@@ -1,58 +1,148 @@
-# Install Jenkins using Docker Compose
+# 🚀 Jenkins CI/CD Pipeline Setup
 
-This repository contains a Docker Compose configuration for a quick installation of Jenkins. This setup is not intended for production systems.
+## 📌 Overview
+This guide walks you through setting up **Jenkins** for a complete CI/CD pipeline, integrating **GitHub, Docker, and Kubernetes**. Follow the steps to configure Jenkins, set up credentials, and deploy your application to **Minikube or Kubernetes clusters**.
 
-Credits: This approach is mostly based on the [offical instructions](https://www.jenkins.io/doc/book/installing/docker/) but takes advantage of Docker Compose (by using a `docker-compose.yml` file) to reduce the number of steps needed to get Jenkins up and running.
+---
 
-# Docker Installation
+## ⚙️ Prerequisites
 
-## Step 1
+Ensure you have the following installed:
+- **Docker** (Install [here](https://docs.docker.com/get-docker/))
+- **Jenkins** (via Docker or native installation)
+- **Git** (Install [here](https://git-scm.com/downloads))
+- **Kubectl** (Install [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/))
+- **Minikube** (Install [here](https://minikube.sigs.k8s.io/docs/start/))
 
-Install Docker locally (probably using Docker Desktop is the easiest approach).
+---
 
-## Step 2
+## 🛠 Install Jenkins using Docker
 
-Clone this repository or download it's contents. 
-
-## Step 2
-
-Open a terminal window in the same directory where the `Dockerfile` from this repository is located. Build the Jenkins Docker image:
-
-```
-docker build -t my-jenkins .
-```
-
-## Step 3
-
-Start Jenkins:
-
-```
-docker compose up -d
+1️⃣ **Clone the Jenkins setup repository:**
+```sh
+ git clone git@github.com:WhiteboxHub/classroom-cicd-jenkins.git
+ cd classroom-cicd-jenkins
 ```
 
-## Step 4
-
-Open Jenkins by going to: [http://localhost:8080/](http://localhost:8080/) and finish the installation process.
-
-## Step 5
-
-If you wish to stop Jenkins and get back to it later, run:
-
-```
-docker compose down
+2️⃣ **Build and run Jenkins:**
+```sh
+ docker build -t my-jenkins .
+ docker compose up -d
 ```
 
-If you wish to start Jenkins again later, just run the same comand from Step 3.
-
-
-# Removing Jenkins
-
-Once you are done playing with Jenkins maybe it is time to clean things up.
-
-Run the following comand to terminate Jenkins and to remove all volumes and images used:
-
+3️⃣ **Access Jenkins UI:**
+- Open [http://localhost:8080](http://localhost:8080)
+- Retrieve the **initial admin password** from:
+```sh
+ docker exec my-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
-docker compose down --volumes --rmi all 
+
+4️⃣ **Install suggested plugins and create an admin user.**
+
+---
+
+## 🔐 Configuring Jenkins Credentials
+
+After setting up Jenkins, navigate to **Manage Jenkins → Manage Credentials** and add the following:
+
+| Credential ID | Type | Used For |
+|--------------|------|----------|
+| `github-credentials` | Username & Password | Accessing private GitHub repositories |
+| `docker-hub-credentials` | Username & Password | Pushing images to Docker Hub |
+| `kubeconfig` | Secret File | Accessing Kubernetes cluster |
+
+---
+
+## 📄 Defining Environment Variables
+
+Add these **global environment variables** in **Manage Jenkins → Configure System**:
+
+| Variable | Purpose |
+|----------|---------|
+| `KUBECONFIG` | Path to Kubernetes config file |
+| `BRANCH_NAME` | Branch for the API repo (`main` or `dev`) |
+| `REPO_URL` | URL of the **API repo** (`github.com:WhiteboxHub/classroom-api-simple.git`) |
+| `K8S_REPO_URL` | URL of the **Kubernetes repo** (`https://github.com/WhiteboxHub/classroom-cicd-kubernetes.git`) |
+| `K8S_REPO_BRANCH_NAME` | Branch of the Kubernetes repo (`main`) |
+| `DOCKER_HUB_USERNAME` | Docker Hub username |
+| `DOCKER_HUB_TAGNAME` | Docker image tag |
+| `DOCKER_IMAGE` | Docker image name (`my-api-image`) |
+| `CONTAINER_NAME` | Name of the running container |
+| `MANIFESTO_BRANCH_NAME` | Kubernetes deployment branch |
+| `K8S_REPO_FOLDER_NAME` | Directory where Kubernetes manifests are stored |
+
+---
+
+## 🔄 Setting Up Webhook for Auto-Trigger
+
+To enable automatic builds on code changes:
+
+1️⃣ **Go to GitHub repository settings** (`classroom-api-simple.git`).
+2️⃣ **Navigate to Webhooks → Add webhook**.
+3️⃣ **Enter the Jenkins URL:**
 ```
-## Collabarators
--Whitebox Learning
+http://your-jenkins-url/github-webhook/
+```
+4️⃣ **Set content type** to `application/json`.
+5️⃣ **Save changes**.
+
+🔹 This ensures that when you push changes to GitHub, Jenkins triggers the pipeline automatically.
+
+---
+
+## 🚀 Running the CI/CD Pipeline
+
+1️⃣ **Go to Jenkins → Manage Jenkins → New Item → Pipeline.**
+2️⃣ **Enter the repository URL:**
+```
+https://github.com/WhiteboxHub/classroom-api-simple.git
+```
+3️⃣ **Select "Pipeline script from SCM" and choose `Jenkinsfile`.**
+4️⃣ **Save and run the build.**
+
+✅ **Your application is now built, containerized, and deployed to Kubernetes!** 🎉
+
+---
+
+## 📢 Verifying Deployment in Kubernetes
+
+Check running pods:
+```sh
+kubectl get pods
+```
+
+View logs of a pod:
+```sh
+kubectl logs <pod-name>
+```
+
+Check service endpoints:
+```sh
+kubectl get svc
+```
+
+---
+
+## 🧹 Cleanup
+To stop Jenkins:
+```sh
+ docker compose down
+```
+
+To remove all Docker volumes and images:
+```sh
+ docker compose down --volumes --rmi all
+```
+
+To delete Kubernetes deployments:
+```sh
+kubectl delete -f deployment.yaml
+```
+
+---
+
+## 🎯 Contributors
+- **whitebox learning** 
+
+
+
