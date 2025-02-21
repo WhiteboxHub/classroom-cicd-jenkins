@@ -1,4 +1,4 @@
-# Automated Deployment to Amazon EKS using Jenkins & ECR 🚀
+# Automated Deployment to Amazon EKS using Jenkins
 
 ## Prerequisites ✅
 Ensure you have the following installed and configured:
