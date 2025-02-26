@@ -1,11 +1,17 @@
-# Adding Build Steps in Jenkins
+# Jenkins Freestyle Build Steps
 
-To add a build step in Jenkins, follow these instructions:
+This guide provides instructions on how to add build steps in a Jenkins freestyle project without integrating with SCM.
 
-1. Click on **"Add build step"**.
-2. Choose **"Execute shell"** for Linux/macOS or **"Execute Windows batch command"** for Windows.
- 
-sh '''
+## Steps to Add a Build Step in Jenkins
+
+1. Open Jenkins and create a new **Freestyle Project**.
+2. Scroll down to the **Build** section.
+3. Click on **Add build step**.
+4. Choose **Execute shell** (for Linux/macOS) or **Execute Windows batch command** (for Windows).
+5. Enter the following script in the command section:
+
+### Shell Script (Linux/macOS)
+```sh
 #!/bin/bash
 
 echo "---------------------------------"
@@ -38,4 +44,43 @@ echo "CI/CD Process Completed!"
 echo "---------------------------------"
 
 exit 0
-'''
+```
+
+### Windows Batch Script
+```bat
+echo ---------------------------------
+echo Jenkins Freestyle CI/CD Pipeline
+echo ---------------------------------
+
+:: Step 1: Build
+echo [Build] Compiling the code...
+timeout /t 2 /nobreak >nul
+echo [Build] Compilation Successful!
+
+:: Step 2: Test
+echo [Test] Running automated tests...
+timeout /t 2 /nobreak >nul
+echo [Test] All tests passed!
+
+:: Step 3: Package
+echo [Package] Creating a deployment artifact...
+timeout /t 2 /nobreak >nul
+echo.> app.tar.gz
+echo [Package] Artifact created: app.tar.gz
+
+:: Step 4: Deploy
+echo [Deploy] Simulating deployment...
+timeout /t 2 /nobreak >nul
+echo [Deploy] Application successfully deployed!
+
+echo ---------------------------------
+echo CI/CD Process Completed!
+echo ---------------------------------
+
+exit /b 0
+```
+
+6. Click **Save** and then **Build Now** to test the process.
+
+This will simulate a complete CI/CD pipeline, from building to deploying an application, without requiring SCM integration.
+
