@@ -10,7 +10,7 @@ This guide provides instructions on how to add build steps in a Jenkins freestyl
 4. Choose **Execute shell** (for Linux/macOS) or **Execute Windows batch command** (for Windows).
 5. Enter the following script in the command section:
 
-### Shell Script (Linux/macOS)
+### Shell Script (windows/Linux/macOS)
 ```sh
 #!/bin/bash
 
@@ -46,39 +46,6 @@ echo "---------------------------------"
 exit 0
 ```
 
-### Windows Batch Script
-```bat
-echo ---------------------------------
-echo Jenkins Freestyle CI/CD Pipeline
-echo ---------------------------------
-
-:: Step 1: Build
-echo [Build] Compiling the code...
-timeout /t 2 /nobreak >nul
-echo [Build] Compilation Successful!
-
-:: Step 2: Test
-echo [Test] Running automated tests...
-timeout /t 2 /nobreak >nul
-echo [Test] All tests passed!
-
-:: Step 3: Package
-echo [Package] Creating a deployment artifact...
-timeout /t 2 /nobreak >nul
-echo.> app.tar.gz
-echo [Package] Artifact created: app.tar.gz
-
-:: Step 4: Deploy
-echo [Deploy] Simulating deployment...
-timeout /t 2 /nobreak >nul
-echo [Deploy] Application successfully deployed!
-
-echo ---------------------------------
-echo CI/CD Process Completed!
-echo ---------------------------------
-
-exit /b 0
-```
 
 6. Click **Save** and then **Build Now** to test the process.
 
