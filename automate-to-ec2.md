@@ -88,9 +88,9 @@ Ensure the following tools are installed before proceeding:
    chmod +x ./kubectl
    sudo mv ./kubectl /usr/local/bin/kubectl
    ```
-3. Install Ingress:
+3. Apply Ingress:
    ```sh
-   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml
+   kubectl apply -f ingress.yaml
    ```
 
 ### Deploy Docker Image to EC2
