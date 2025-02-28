@@ -235,9 +235,5 @@ http://<EXTERNAL-IP> or http://<INGRESS-HOSTNAME>
 This README provides a structured approach to deploying and verifying your microservices on AWS EKS. 🚀
 
 
-
-## 🎉 Success!
-Your microservices application is now deployed on AWS EKS! 🚀
-
 ## Contributors
 - whitebox learning
