@@ -1,21 +1,8 @@
-sh ''' 
-environment {
-    KUBECONFIG = "${env.KUBECONFIG}"
-    BRANCH_NAME = "${env.BRANCH_NAME}"
-    REPO_URL = "${env.REPO_URL}"
-    K8S_REPO_URL = "${env.K8S_REPO_URL}"
-    K8S_REPO_BRANCH_NAME = "${env.K8S_REPO_BRANCH_NAME}"
-    DOCKER_HUB_USERNAME = "${env.DOCKER_HUB_USERNAME}"
-    DOCKER_HUB_TAGNAME = "${env.DOCKER_HUB_TAGNAME}"
-    DOCKER_IMAGE = "${env.DOCKER_IMAGE}"
-    CONTAINER_NAME = "${env.CONTAINER_NAME}"
-    MANIFESTO_BRANCH_NAME = "${env.MANIFESTO_BRANCH_NAME}"
-    K8S_REPO_FOLDER_NAME = "${env.K8S_REPO_FOLDER_NAME}"
-}
-''' 
-# Start Generation Here
-sh '''
 # 📄 Configuring Environment Variables in Jenkins
+
+## Environment Variables
+
+Below is a list of environment variables used in the Jenkins pipeline and their purposes:
 
 | Variable                     | Purpose                                                  |
 |------------------------------|----------------------------------------------------------|
@@ -33,15 +20,53 @@ sh '''
 
 ## Steps to Configure Environment Variables
 
-1. **Access Jenkins Dashboard**: Open your Jenkins instance in a web browser.
+1. **Access Jenkins Dashboard**  
+   Open your Jenkins instance in a web browser.
 
-2. **Navigate to Configure System**: Go to **Manage Jenkins** > **Configure System**.
+2. **Navigate to Configure System**  
+   Go to **Manage Jenkins** > **Configure System**.
 
-3. **Add Environment Variables**: Scroll down to the **Global properties** section and check the box for **Environment variables**. Then, add the variables listed in the table above.
+3. **Add Environment Variables**  
+   Scroll down to the **Global properties** section and check the box for **Environment variables**. Then, add the variables listed in the table above.
 
-4. **Save Changes**: After adding all the required variables, scroll down and click on the **Save** button to apply the changes.
+4. **Save Changes**  
+   After adding all the required variables, scroll down and click on the **Save** button to apply the changes.
 
-5. **Verify Configuration**: To ensure that the environment variables are set correctly, you can create a simple pipeline job that echoes the variables to the console output.
+5. **Verify Configuration**  
+   To ensure that the environment variables are set correctly, create a simple pipeline job that echoes the variables to the console output.
 
-'''
-# End Generation Here
+### Example Pipeline Code
+
+```sh
+pipeline {
+    agent any
+    environment {
+        KUBECONFIG = "${env.KUBECONFIG}"
+        BRANCH_NAME = "${env.BRANCH_NAME}"
+        REPO_URL = "${env.REPO_URL}"
+        K8S_REPO_URL = "${env.K8S_REPO_URL}"
+        K8S_REPO_BRANCH_NAME = "${env.K8S_REPO_BRANCH_NAME}"
+        DOCKER_HUB_USERNAME = "${env.DOCKER_HUB_USERNAME}"
+        DOCKER_HUB_TAGNAME = "${env.DOCKER_HUB_TAGNAME}"
+        DOCKER_IMAGE = "${env.DOCKER_IMAGE}"
+        CONTAINER_NAME = "${env.CONTAINER_NAME}"
+        MANIFESTO_BRANCH_NAME = "${env.MANIFESTO_BRANCH_NAME}"
+        K8S_REPO_FOLDER_NAME = "${env.K8S_REPO_FOLDER_NAME}"
+    }
+    stages {
+        stage('Verify Environment Variables') {
+            steps {
+                script {
+                    echo "KUBECONFIG: ${env.KUBECONFIG}"
+                    echo "BRANCH_NAME: ${env.BRANCH_NAME}"
+                    echo "REPO_URL: ${env.REPO_URL}"
+                    echo "K8S_REPO_URL: ${env.K8S_REPO_URL}"
+                    echo "DOCKER_IMAGE: ${env.DOCKER_IMAGE}"
+                }
+            }
+        }
+    }
+}
+```
+
+This will print the values of the environment variables to ensure they are correctly configured.
